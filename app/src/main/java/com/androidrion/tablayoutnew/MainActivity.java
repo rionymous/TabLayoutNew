@@ -16,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     TabLayout tabLayout;
     FrameLayout simpleFrameLayout;
+    Fragment fragment = null;
+    FragmentTransaction ft;
+    FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +30,17 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         tabLayout = findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Call"));
         tabLayout.addTab(tabLayout.newTab().setText("Chat"));
+        tabLayout.addTab(tabLayout.newTab().setText("Call"));
 
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        fragment = new TabCall();
+        fm = getSupportFragmentManager();
+        ft = fm.beginTransaction();
+        ft.replace(R.id.simpleFrameLayout, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Fragment fragment = null;
@@ -42,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new TabChat();
                         break;
                 }
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
+                fm = getSupportFragmentManager();
+                ft = fm.beginTransaction();
                 ft.replace(R.id.simpleFrameLayout, fragment);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
             }
 
